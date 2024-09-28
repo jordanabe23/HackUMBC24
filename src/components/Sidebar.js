@@ -19,7 +19,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 h-screen p-5 pt-8 relative duration-300`}>
+    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-300`}>
       <FaBars
         className={`absolute cursor-pointer -right-3 top-9 w-7 border-blue-300 border-2 rounded-full ${!isExpanded && 'rotate-180'}`}
         onClick={() => setIsExpanded(!isExpanded)}
