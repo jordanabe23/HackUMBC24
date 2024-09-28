@@ -4,7 +4,7 @@
 import { useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation'; // Added usePathname
 import Link from 'next/link';
-import { FaComments, FaCalendarAlt, FaUsers, FaCog, FaBars } from 'react-icons/fa';
+import { FaHome, FaComments, FaCalendarAlt, FaUsers, FaCog, FaBars } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -12,6 +12,7 @@ const Sidebar = () => {
   const pathname = usePathname(); // Use usePathname to get the current path
 
   const menuItems = [
+    { name: 'Dashboard', icon: <FaHome />, path: '/' },
     { name: 'Chat', icon: <FaComments />, path: '/chat' },
     { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'People', icon: <FaUsers />, path: '/people' },
