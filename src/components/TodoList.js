@@ -1,22 +1,37 @@
-'use client';
-
+import { useEffect, useState } from 'react';
 import { FaCheckCircle, FaRegCircle } from 'react-icons/fa';
-import { useState } from 'react';
+import axios from 'axios';
 
-const TodoList = () => {
-  const [todos, setTodos] = useState([
-    { id: 1, text: 'Water Aloe Vera', completed: false },
-    { id: 2, text: 'Vacuum Living Room', completed: true },
-    { id: 3, text: 'Fertilize Tomatoes', completed: false },
-    { id: 4, text: 'Clean Kitchen', completed: false },
-  ]);
+const TodoList = ({ userId }) => {
+  const [todos, setTodos] = useState([]);
 
-  const toggleComplete = (id) => {
-    setTodos((prev) =>
-      prev.map((todo) =>
-        todo.id === id ? { ...todo, completed: !todo.completed } : todo
-      )
-    );
+  useEffect(() => {
+    const fetchTodos = async () => {
+      try {
+        const response = await axios.get(`/api/todos/user/${userId}`);
+        setTodos(response.data);
+      } catch (err) {
+        console.error('Error fetching to-dos:', err);
+      }
+    };
+
+    fetchTodos();
+  }, [userId]);
+
+  const toggleComplete = async (id) => {
+    const todo = todos.find((todo) => todo._id === id);
+    try {
+      await axios.put(`/api/todos/${id}`, {
+        completed: !todo.completed,
+      });
+      setTodos((prev) =>
+        prev.map((todo) =>
+          todo._id === id ? { ...todo, completed: !todo.completed } : todo
+        )
+      );
+    } catch (err) {
+      console.error('Error updating to-do:', err);
+    }
   };
 
   return (
@@ -25,22 +40,25 @@ const TodoList = () => {
       <ul>
         {todos.map((todo) => (
           <li
-            key={todo.id}
+            key={todo._id}
             className="flex items-center mb-3 cursor-pointer"
-            onClick={() => toggleComplete(todo.id)}
+            onClick={() => toggleComplete(todo._id)}
           >
             {todo.completed ? (
               <FaCheckCircle className="text-green-500 mr-3" />
             ) : (
               <FaRegCircle className="text-gray-500 mr-3" />
             )}
-            <span
-              className={`text-gray-700 ${
-                todo.completed ? 'line-through text-gray-500' : ''
-              }`}
-            >
-              {todo.text}
-            </span>
+            <div>
+              <span className={`text-gray-700 ${todo.completed ? 'line-through text-gray-500' : ''}`}>
+                {todo.text}
+              </span>
+              {todo.plant && (
+                <p className="text-sm text-gray-600">
+                  Plant: {todo.plant.name}, Water every {todo.plant.wateringFrequency} days
+                </p>
+              )}
+            </div>
           </li>
         ))}
       </ul>
