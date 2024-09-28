@@ -1,4 +1,3 @@
-// app/login/page.js
 'use client';
 
 import { useState } from 'react';
@@ -80,7 +79,7 @@ const Login = () => {
           {isLoading ? 'Logging in...' : 'Login'}
         </button>
         <p className="mt-4 text-black text-center">
-          Don't have an account?{' '}
+          Don&apos;t have an account?{' '}
           <a href="/register" className="text-blue-500 hover:underline">
             Register here
           </a>

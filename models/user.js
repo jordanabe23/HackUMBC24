@@ -1,16 +1,9 @@
-// src/models/user.js
 import mongoose from 'mongoose';
 
-const { Schema } = mongoose; // Ensure you import Schema from mongoose
+const { Schema } = mongoose;
 
-// Define the schema for the user
 const UserSchema = new Schema({
   username: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  email: { // Add email field from the incoming changes
     type: String,
     required: true,
     unique: true,
@@ -19,10 +12,9 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }] // Add groups field from the incoming changes
+  groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }]
 });
 
-// Create a model from the schema
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
 
 export default User;
