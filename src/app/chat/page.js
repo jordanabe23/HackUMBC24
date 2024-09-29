@@ -49,69 +49,68 @@ const Chat = () => {
   const sendWelcomeMessage = async (token) => {
     setLoading(true);
     try {
-        // Step 1: Fetch groups
-        const groupsResponse = await fetch('/api/groups', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
+      // Step 1: Fetch groups
+      const groupsResponse = await fetch('/api/groups', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!groupsResponse.ok) {
-            throw new Error('Error fetching groups');
-        }
+      if (!groupsResponse.ok) {
+        throw new Error('Error fetching groups');
+      }
 
-        const groupsData = await groupsResponse.json();
-        const groups = groupsData.map(group => group.name); // Extract only the names
+      const groupsData = await groupsResponse.json();
+      const groups = groupsData.map(group => group.name); // Extract only the names
 
-        // Step 2: Fetch todos
-        const todosResponse = await fetch('/api/todos', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
+      // Step 2: Fetch todos
+      const todosResponse = await fetch('/api/todos', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
 
-        if (!todosResponse.ok) {
-            throw new Error('Error fetching todos');
-        }
+      if (!todosResponse.ok) {
+        throw new Error('Error fetching todos');
+      }
 
-        const todosData = await todosResponse.json();
-        const todos = todosData.todos || []; // Adjust based on your API response structure
+      const todosData = await todosResponse.json();
+      const todos = todosData.todos || []; // Adjust based on your API response structure
 
-        // Step 3: Prepare the message for OpenAI
-        const messageContent = `
+      // Step 3: Prepare the message for OpenAI
+      const messageContent = `
           You are a helpful assistant. The user is part of the following groups: ${groups.join(', ')}.
           They have the following todo items: ${todos.join(', ')}.
           Please provide personalized recommendations for them.
         `;
+      // Step 4: Send the request to OpenAI
+      const response = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: [{ role: 'system', content: messageContent }],
+        }),
+      });
 
-        // Step 4: Send the request to OpenAI
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                messages: [{ role: 'system', content: messageContent }],
-            }),
-        });
-
-        const data = await response.json();
-        if (response.ok) {
-            setMessages((prevMessages) => [...prevMessages, { sender: 'bot', text: data.reply }]);
-        } else {
-            console.error('Error sending welcome message:', data.error);
-        }
+      const data = await response.json();
+      if (response.ok) {
+        setMessages((prevMessages) => [...prevMessages, { sender: 'bot', text: data.reply }]);
+      } else {
+        console.error('Error sending welcome message:', data.error);
+      }
     } catch (error) {
-        console.error('Error sending welcome message:', error);
+      console.error('Error sending welcome message:', error);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
+  };
 
   const sendMessage = async (e) => {
     e.preventDefault();

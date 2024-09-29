@@ -1,10 +1,10 @@
 'use client';
 
 import StatisticCard from './StatisticCard';
-import TodoList from './TodoList';
+import GroupList from './GroupList'; // Import GroupList to replace TodoList
 import CalendarComponent from './CalendarComponent';
 
-const DashboardClientWrapper = () => {
+const DashboardClientWrapper = ({ username }) => {
   return (
     <>
       {/* Statistics Section */}
@@ -29,10 +29,11 @@ const DashboardClientWrapper = () => {
         />
       </div>
 
-      {/* Main Content: Todo List and Calendar */}
+      {/* Main Content: Group List and Calendar */}
       <div className="flex flex-col lg:flex-row gap-6">
         <div className="lg:w-1/2">
-          <TodoList />
+          {/* Replacing TodoList with GroupList */}
+          <GroupList username={username} />
         </div>
         <div className="lg:w-1/2">
           <CalendarComponent />

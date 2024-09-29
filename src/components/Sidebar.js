@@ -3,11 +3,14 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaSignOutAlt, FaPagelines, FaComment } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaSignOutAlt, FaPagelines, FaComment, FaPlusCircle } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Initially expanded
   const [hasCollapsedOnce, setHasCollapsedOnce] = useState(false); // Track if it has collapsed once
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [groupName, setGroupName] = useState(''); // Group name state
+  const [error, setError] = useState(null); // Error state for form
   const router = useRouter();
   const pathname = usePathname();
 
@@ -23,6 +26,42 @@ const Sidebar = () => {
     // Redirect to the login page or home page
     router.push('/login');
   }
+
+  // Create new group API call
+  const createGroup = async () => {
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        throw new Error('Authentication token not found.');
+      }
+
+      const response = await fetch('/api/groups', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ groupName })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to create group: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Group created:', data);
+
+      // Reset form and close modal
+      setGroupName('');
+      setIsModalOpen(false);
+      setError(null);
+
+      // You can also redirect or refresh the group list here if needed
+    } catch (err) {
+      setError(err.message || 'Failed to create group. Please try again later.');
+    }
+  };
 
   // Auto-collapse the sidebar once after the component is first rendered
   useEffect(() => {
@@ -67,6 +106,12 @@ const Sidebar = () => {
             );
           })}
         </ul>
+
+        {/* Create Group Button */}
+        <div className="flex items-center mt-6 cursor-pointer p-2 rounded-md hover:bg-blue-300" onClick={() => setIsModalOpen(true)}>
+          <FaPlusCircle className="text-2xl text-gray-800" />
+          {isExpanded && <span className="text-gray-800 text-lg ml-2">Create New Group</span>}
+        </div>
       </div>
 
       {/* Logout Button Positioned at the Bottom */}
@@ -79,6 +124,37 @@ const Sidebar = () => {
           {isExpanded && <span className="text-gray-800 text-lg">Logout</span>}
         </div>
       </div>
+
+      {/* Modal for Creating New Group */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-80">
+            <h2 className="text-xl font-bold mb-4">Create New Group</h2>
+            <input
+              type="text"
+              value={groupName}
+              onChange={(e) => setGroupName(e.target.value)}
+              placeholder="Enter group name"
+              className="border border-gray-300 p-2 w-full mb-4"
+            />
+            {error && <p className="text-red-500">{error}</p>}
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="px-4 py-2 bg-gray-300 rounded-md"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={createGroup}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md"
+              >
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
