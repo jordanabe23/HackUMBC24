@@ -157,7 +157,7 @@ const TodoList = () => {
                 value={newTodo.text}
                 onChange={handleInputChange}
                 placeholder="Task Name"
-                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
                 required
               />
               <textarea
@@ -165,13 +165,15 @@ const TodoList = () => {
                 value={newTodo.description}
                 onChange={handleInputChange}
                 placeholder="Description"
-                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
+                style={{ minWidth: '300px', minHeight: '100px', maxHeight: '300px' }}  // Inline styles for minimum size
               />
+
               <select
                 name="recurrence"
                 value={newTodo.recurrence}
                 onChange={handleInputChange}
-                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
               >
                 <option value="once">Once</option>
                 <option value="daily">Daily</option>
@@ -182,7 +184,7 @@ const TodoList = () => {
                 name="groupId"
                 value={newTodo.groupId}
                 onChange={handleInputChange}
-                className="w-full p-2 mb-4 border border-green-300 rounded focus:outline-none focus:border-green-500"
+                className="w-full p-2 mb-4 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
                 required
               >
                 <option value="">Select Group</option>
