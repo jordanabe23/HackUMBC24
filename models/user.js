@@ -2,6 +2,15 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
+const ConversationSchema = new mongoose.Schema(
+  {
+    sender: { type: String, enum: ['user', 'bot'], required: true },
+    text: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now },
+  },
+  { _id: false }
+);
+
 const UserSchema = new Schema({
   username: {
     type: String,
@@ -12,9 +21,10 @@ const UserSchema = new Schema({
     type: String,
     required: true, // Ensures password is required
   },
+  conversations: [ConversationSchema],  // Comma added here
   groups: [{
     type: Schema.Types.ObjectId,
-    ref: 'Group',
+    ref: 'Group',  // Removed 'required: true' for array of references
     required: true // Corrected typo here
   }],
 });

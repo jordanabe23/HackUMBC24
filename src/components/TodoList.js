@@ -7,17 +7,18 @@ const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTodo, setNewTodo] = useState({
-    text: '',        // For Task Name
+    text: '',        
     description: '',
     recurrence: 'once',
-    groupId: '',     // For Group
+    groupId: '',     
   });
-  const [groups, setGroups] = useState([]); // State to hold available groups
+  const [groups, setGroups] = useState([]);
   const [error, setError] = useState(null);
+  const [suggestions, setSuggestions] = useState({}); // State to hold suggestions for each todo
 
   useEffect(() => {
     fetchTodos();
-    fetchGroups(); // Fetch groups when the component mounts
+    fetchGroups();
   }, []);
 
   const fetchTodos = async () => {
@@ -40,9 +41,36 @@ const TodoList = () => {
 
       const todos = await response.json();
       setTodos(todos);
+      await fetchSuggestions(todos); // Fetch suggestions after todos are loaded
     } catch (error) {
       setError('Failed to load todos. Please try again later.');
     }
+  };
+
+  const fetchSuggestions = async (todos) => {
+    const newSuggestions = {};
+    for (const todo of todos) {
+      try {
+        const response = await fetch('/api/chatgpt-suggestion', { // Adjust your endpoint accordingly
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ todo }), // Send the full JSON body of the todo
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch suggestion');
+        }
+
+        const suggestion = await response.json();
+        newSuggestions[todo._id] = suggestion.text; // Store the suggestion keyed by the todo ID
+      } catch (error) {
+        console.error(`Error fetching suggestion for todo ${todo._id}:`, error);
+        newSuggestions[todo._id] = 'No suggestion available.'; // Fallback in case of an error
+      }
+    }
+    setSuggestions(newSuggestions); // Update the suggestions state
   };
 
   const fetchGroups = async () => {
@@ -100,7 +128,7 @@ const TodoList = () => {
         throw new Error(errorResponse.error || 'Failed to add todo');
       }
 
-      await fetchTodos();
+      await fetchTodos(); // Refresh the list after adding
       setIsModalOpen(false);
       setNewTodo({ text: '', description: '', recurrence: 'once', groupId: '' });
     } catch (err) {
@@ -120,23 +148,26 @@ const TodoList = () => {
 
       <ul>
         {todos.map((todo) => (
-          <li key={todo._id} className="flex items-center mb-3">
-            {todo.completed ? (
-              <FaCheckCircle className="text-green-500 mr-3" />
-            ) : (
-              <FaRegCircle className="text-gray-500 mr-3" />
-            )}
-            <div>
-              <span className={`text-green-700 ${todo.completed ? 'line-through text-green-500' : ''}`}>
-                {todo.text}
-              </span>
-              {todo.description && (
-                <p className="text-sm text-green-600">{todo.description}</p>
+          <li key={todo._id} className="flex flex-col mb-3">
+            <div className="flex items-center">
+              {todo.completed ? (
+                <FaCheckCircle className="text-green-500 mr-3" />
+              ) : (
+                <FaRegCircle className="text-gray-500 mr-3" />
               )}
-              {todo.recurrence !== 'once' && (
-                <p className="text-sm text-green-600">Recurs: {todo.recurrence}</p>
-              )}
+              <div>
+                <span className={`text-gray-700 ${todo.completed ? 'line-through text-gray-500' : ''}`}>
+                  {todo.text}
+                </span>
+                {todo.description && (
+                  <p className="text-sm text-gray-600">{todo.description}</p>
+                )}
+                {todo.recurrence !== 'once' && (
+                  <p className="text-sm text-gray-600">Recurs: {todo.recurrence}</p>
+                )}
+              </div>
             </div>
+            <p className="text-sm text-gray-500 mt-1">{suggestions[todo._id] || 'Loading suggestion...'}</p>
           </li>
         ))}
       </ul>
@@ -166,9 +197,8 @@ const TodoList = () => {
                 onChange={handleInputChange}
                 placeholder="Description"
                 className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
-                style={{ minWidth: '300px', minHeight: '100px', maxHeight: '300px' }}  // Inline styles for minimum size
+                style={{ minWidth: '300px', minHeight: '100px', maxHeight: '300px' }}
               />
-
               <select
                 name="recurrence"
                 value={newTodo.recurrence}
