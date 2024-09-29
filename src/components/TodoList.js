@@ -50,7 +50,7 @@ const TodoList = () => {
   const fetchGroups = async () => {
     try {
       const token = localStorage.getItem('token');
-      
+
       const response = await fetch('/api/groups', {
         method: 'GET',
         headers: {
@@ -58,11 +58,11 @@ const TodoList = () => {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
       }
-  
+
       const fetchedGroups = await response.json();
       console.log('Fetched Groups:', fetchedGroups); // Log the fetched groups
       setGroups(fetchedGroups); // Set the groups state
@@ -70,7 +70,7 @@ const TodoList = () => {
       console.error('Error fetching groups:', error);
     }
   };
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTodo(prev => ({ ...prev, [name]: value }));
@@ -153,8 +153,8 @@ const TodoList = () => {
         <FaPlus />
       </button>
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-96">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96 relative z-60">
             <h3 className="text-xl font-semibold mb-4">Add New Task</h3>
             <form onSubmit={handleSubmit}>
               <input
