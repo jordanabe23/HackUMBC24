@@ -11,10 +11,6 @@ const CalendarComponent = () => {
 
   // Sample events (tasks) mapped to dates
   const events = {
-    '2024-10-05': ['Water Aloe Vera'],
-    '2024-10-07': ['Vacuum Living Room'],
-    '2024-10-10': ['Fertilize Tomatoes'],
-    '2024-10-12': ['Clean Kitchen'],
   };
 
   const handleDateClick = (selectedDate) => {
