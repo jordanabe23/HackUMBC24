@@ -12,7 +12,7 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }]
+  groups: [{ type: Schema.Types.ObjectId, ref: 'Group' }], requrired: true
 });
 
 const User = mongoose.models.User || mongoose.model('User', UserSchema);
