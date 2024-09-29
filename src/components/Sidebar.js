@@ -118,10 +118,7 @@ const Sidebar = () => {
         </ul>
 
         {/* Create Group Button */}
-        <div className="flex items-center mt-6 cursor-pointer p-2 rounded-md hover:bg-blue-300" onClick={() => setIsModalOpen(true)}>
-          <FaPlusCircle className="text-2xl text-gray-800" />
-          {isExpanded && <span className="text-gray-800 text-lg ml-2">Create New Group</span>}
-        </div>
+        
       </div>
 
       {/* Logout Button Positioned at the Bottom */}
