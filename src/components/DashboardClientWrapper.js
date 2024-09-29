@@ -20,9 +20,9 @@ const DashboardClientWrapper = () => {
   }, []);
 
   return (
-    <>
+    <div className="min-h-screen bg-gradient-to-br from-green-100 to-green-300 p-6">
       {/* Header Section */}
-      <div className="mb-6 flex flex-col lg:flex-row justify-between items-center gap-4">
+      <div className="mb-6 flex flex-col lg:flex-row justify-between items-center gap-4 ">
         {/* Username Section */}
         <h2 className="text-black text-6xl font-bold">
           {username ? username : 'User'}!
@@ -45,7 +45,7 @@ const DashboardClientWrapper = () => {
           <StatisticCard
             end={150}
             label="Tasks Created"
-            bgColor= "bg-[#3A967F]"
+            bgColor="bg-[#3A967F]"
             textColor="text-[#9AB973]"
           />
         </div>
@@ -61,7 +61,7 @@ const DashboardClientWrapper = () => {
           <CalendarComponent />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

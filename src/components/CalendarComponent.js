@@ -152,7 +152,7 @@ const CalendarComponent = () => {
   };
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-md">
+    <div className="bg-white p-6 rounded-lg shadow-md bg-gradient-to-br from-green-100 to-green-300">
       <h2 className="text-2xl font-semibold text-dark-green mb-4">Task Calendar</h2>
       <div className="calendar-wrapper">
         {error && <p className="text-red-500">{error}</p>} {/* Display error if exists */}

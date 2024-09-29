@@ -113,7 +113,7 @@ const GroupItem = ({ group }) => {
     };
 
     return (
-        <div className="group-item bg-white shadow-lg rounded-lg p-4 mb-4">
+        <div className="group-item bg-gradient-to-br from-green-100 to-green-300 shadow-lg rounded-lg p-4 mb-4">
             {/* Display the group name as the card title */}
             <h1 className="text-3xl font-bold mb-4 text-white bg-blue-500 p-2 rounded">{name}</h1>
             {/* Show loading indicator while fetching */}
