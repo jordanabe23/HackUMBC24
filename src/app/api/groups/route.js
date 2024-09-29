@@ -38,7 +38,7 @@ export async function GET(req) {
     }
 
     const userId = decoded.id; // Adjust based on your JWT payload structure
-  
+
     // Connect to the database
     await dbConnect();
 
