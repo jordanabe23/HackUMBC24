@@ -42,9 +42,8 @@ export async function GET(req) {
     // Connect to the database
     await dbConnect();
 
-    // Find the user in the Users collection
+    // Find the user and populate the 'groups' field
     const user = await User.findById(userId).populate('groups'); // Assuming 'groups' is a reference in User model
-    console.log(user);
     if (!user || !user.groups || user.groups.length === 0) {
       return new Response(JSON.stringify({ message: 'No groups found for this user' }), {
         status: 404,
