@@ -3,6 +3,7 @@ import Todo from '../../../../models/todo';
 import User from '../../../../models/user';
 import jwt from 'jsonwebtoken';
 
+// Utility function to authenticate the user
 const authenticateUser = (request) => {
   const authHeader = request.headers.get('Authorization');
   if (!authHeader) {
@@ -33,13 +34,20 @@ const authenticateUser = (request) => {
   return decoded.id; // Assuming the userId is stored as 'id' in your JWT
 };
 
+// GET request handler
 export async function GET(request) {
   await dbConnect(); // Ensure database connection
 
   try {
     const userId = authenticateUser(request);
+<<<<<<< Updated upstream
     
     const user = await User.findById(userId).select('groups');
+=======
+
+    // Fetch the user's information including their group IDs
+    const user = await User.findById(userId).select('groups'); // Fetch groups only
+>>>>>>> Stashed changes
     if (!user) {
       return new Response(
         JSON.stringify({ error: 'User not found.' }),
@@ -48,8 +56,15 @@ export async function GET(request) {
     }
 
     const groupIds = user.groups; // Get the list of group IDs
+<<<<<<< Updated upstream
 
     const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ created: -1 });
+=======
+    console.log('Groups:', groupIds);
+
+    // Fetch todos that match the user's group IDs
+    const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ createdAt: -1 });
+>>>>>>> Stashed changes
 
     return new Response(JSON.stringify(todos), {
       status: 200,
@@ -64,27 +79,27 @@ export async function GET(request) {
   }
 }
 
+// POST request handler
 export async function POST(request) {
   await dbConnect();
 
   try {
-    const userId = authenticateUser(request);
-    if (!userId) {
-      return new Response(
-        JSON.stringify({ error: 'Authentication failed.' }),
-        { status: 401, headers: { 'Content-Type': 'application/json' } }
-      );
-    }
+    const userId = authenticateUser(request); // Authenticate the user
 
     const body = await request.json();
 
+<<<<<<< Updated upstream
+=======
+    // Validate required fields
+>>>>>>> Stashed changes
     if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
       return new Response(
-        JSON.stringify({ error: 'Task name is required and must be a non-empty string.' }),
+        JSON.stringify({ error: 'Todo name is required and must be a non-empty string.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
+<<<<<<< Updated upstream
     if (!body.groupId || typeof body.groupId !== 'string' || body.groupId.trim() === '') {
       return new Response(
         JSON.stringify({ error: 'Group ID is required.' }),
@@ -117,6 +132,16 @@ export async function POST(request) {
       last_check: null, // Default as null
       groupId: body.groupId,
       userId,
+=======
+    // Create a new Todo instance with the provided data
+    const newTodo = new Todo({
+      name: body.name.trim(), // Ensure the name is a trimmed string
+      description: body.description ? body.description.trim() : '', // Optional description
+      recurrence: body.recurrence || 'once', // Default to 'once' if recurrence is not provided
+      completed: false, // Newly created todos are not completed
+      userId, // Associate the Todo with the authenticated user
+      groupId: body.groupId // Make sure this field is passed in the request body
+>>>>>>> Stashed changes
     });
 
     await newTodo.save();
@@ -133,3 +158,66 @@ export async function POST(request) {
     );
   }
 }
+<<<<<<< Updated upstream
+=======
+
+// PUT request handler to update 'completed' status of a todo
+export async function PUT(request) {
+  console.log('Starting PUT request'); // Log start
+  await dbConnect(); // Ensure database connection
+
+  try {
+    const userId = authenticateUser(request); // Authenticate the user
+    console.log('User authenticated:', userId); // Log authenticated user
+
+    const body = await request.json();
+    console.log('Request body received:', body); // Log body
+
+    const { completed } = body; // Only receive 'completed' in body
+    const { searchParams } = new URL(request.url); // Extract todoId from query parameters
+    const todoId = searchParams.get('todoId'); // Fetch the todoId from the URL query
+
+    if (!todoId) {
+      return new Response(
+        JSON.stringify({ error: 'todoId is required' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    if (typeof completed !== 'boolean') {
+      console.error('Validation failed: Completed must be a boolean');
+      return new Response(
+        JSON.stringify({ error: 'Completed status must be a boolean.' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Find and update the todo's completed status
+    const updatedTodo = await Todo.findByIdAndUpdate(
+      todoId,
+      { completed }, // Update the completed status
+      { new: true }  // Return the updated document
+    );
+
+    if (!updatedTodo) {
+      return new Response(
+        JSON.stringify({ error: 'Todo not found.' }),
+        { status: 404, headers: { 'Content-Type': 'application/json' } }
+      );
+    }
+
+    console.log('Todo updated successfully:', updatedTodo);
+
+    return new Response(JSON.stringify(updatedTodo), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('Error in PUT /api/todos:', error.message); // Log the actual error
+    return new Response(
+      JSON.stringify({ error: `Internal Server Error: ${error.message}` }),
+      { status: 500, headers: { 'Content-Type': 'application/json' } }
+    );
+  }
+}
+>>>>>>> Stashed changes

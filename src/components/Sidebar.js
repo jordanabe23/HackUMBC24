@@ -17,6 +17,8 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/' },
     { name: 'Chat', icon: <FaComment />, path: '/chat' },
+
+
     { name: 'Plants', icon: <FaUsers />, path: '/people' },
   ];
 

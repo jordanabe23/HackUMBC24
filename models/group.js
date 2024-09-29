@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const groupSchema = new Schema({
-  groupName: { type: String, required: true }, // Ensure 'required' is spelled correctly
-  todos: [{ type: Schema.Types.ObjectId, todos: [] }], // No need for 'required: true' in arrays of references
+  groupName: { type: String, required: true }, // Group name is required
+  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }], // Reference to Todo items
 });
 
 // Prevent OverwriteModelError by checking if the model already exists
