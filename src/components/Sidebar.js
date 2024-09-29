@@ -36,6 +36,9 @@ const Sidebar = () => {
     }
   }, [hasCollapsedOnce]);
 
+  // Hide sidebar if pathname includes "login"
+  if (pathname.includes("login")) return null;
+
   return (
     <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000 flex flex-col justify-between h-screen`}>
       <div>
