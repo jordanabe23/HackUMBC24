@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaHome, FaComments, FaCalendarAlt, FaUsers, FaCog, FaLeaf, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaLeaf, FaSignOutAlt, FaPagelines } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Initially expanded
@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/' },
-    { name: 'Chat', icon: <FaComments />, path: '/chat' },
+    { name: 'Chat', icon: <FaPagelines />, path: '/chat' },
     { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'People', icon: <FaUsers />, path: '/people' },
     { name: 'Settings', icon: <FaCog />, path: '/settings' }
@@ -32,7 +32,7 @@ const Sidebar = () => {
       setTimeout(() => {
         setIsExpanded(false); // Collapse the sidebar
         setHasCollapsedOnce(true); // Ensure it only happens once
-      }, 1000); // Optional delay of 1 second for visibility
+      }, 4000); // Optional delay of 1 second for visibility
     }
   }, [hasCollapsedOnce]);
 
@@ -50,7 +50,7 @@ const Sidebar = () => {
           onClick={() => setIsExpanded(!isExpanded)}
         />
         <div className="flex items-center gap-x-4">
-          <FaComments className="text-2xl text-gray-800" />
+          <FaPagelines className="text-2xl text-gray-800" />
           {isExpanded && <span className="text-gray-800 text-xl font-bold">Reminders</span>}
         </div>
         <ul className="pt-6">
