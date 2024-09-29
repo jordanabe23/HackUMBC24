@@ -164,7 +164,7 @@ const People = () => {
   };
 
   return (
-    <div className="relative min-h-screen p-6">
+    <div className="relative min-h-screen p-6 bg-gradient-to-br from-green-100 to-green-300">
       <Head>
         <title>Manage Your Plants - Group Reminders</title>
         <meta name="description" content="Manage your plant groups easily" />
@@ -186,7 +186,7 @@ const People = () => {
               Group ID: {group._id}
             </p>
             <div className="flex space-x-4 mt-4">
-              <button className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">
+              <button className="px-4 py-2 bg-green-800 text-white rounded hover:bg-red-600 transition">
                 Remove
               </button>
             </div>
