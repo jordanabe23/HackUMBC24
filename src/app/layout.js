@@ -58,8 +58,8 @@ export default function RootLayout({ children }) {
   }, []);
 
   // Determine the background class based on the current path
-  const backgroundClass = pathname === '/register' || pathname === '/login' 
-    ? 'bg-gradient-to-br from-green-100 to-green-300' 
+  const backgroundClass = pathname === '/register' || pathname === '/login'
+    ? 'bg-gradient-to-br from-green-100 to-green-300'
     : 'bg-slate-50';
 
   return (
