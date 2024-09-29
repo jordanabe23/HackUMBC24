@@ -14,9 +14,7 @@ const Sidebar = () => {
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/' },
     { name: 'Chat', icon: <FaComment />, path: '/chat' },
-    { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'Plants', icon: <FaUsers />, path: '/people' },
-    { name: 'Settings', icon: <FaCog />, path: '/settings' }
   ];
 
   function handleLogout() {
