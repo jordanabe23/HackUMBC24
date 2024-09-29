@@ -1,4 +1,3 @@
-// app/layout.js
 'use client';
 
 import localFont from "next/font/local";
@@ -18,7 +17,6 @@ const geistMono = localFont({
   variable: "--font-geist-mono",
   weight: "100 900",
 });
-
 
 export default function RootLayout({ children }) {
   const router = useRouter();
@@ -59,11 +57,16 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('login', handleLogin);
   }, []);
 
+  // Determine the background class based on the current path
+  const backgroundClass = pathname === '/register' || pathname === '/login' 
+    ? 'bg-gradient-to-br from-green-100 to-green-300' 
+    : 'bg-slate-50';
+
   return (
     <html lang="en">
-      <body className="flex">
+      <body className={`flex ${backgroundClass}`}>
         {isAuthorized && <Sidebar />}
-        <main className="flex-1 bg-slate-50 min-h-screen p-6">
+        <main className="flex-1 min-h-screen p-6">
           {children}
         </main>
       </body>
