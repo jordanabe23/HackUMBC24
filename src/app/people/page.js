@@ -8,7 +8,7 @@ const People = () => {
           <meta name="description" content="Chat with your team" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
-        <h1 className="text-3xl font-bold text-gray-800">People Page</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Manage Your Plants</h1>
         {/* Chat functionality goes here */}
       </div>
   );
