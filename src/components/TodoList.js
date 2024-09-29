@@ -1,73 +1,132 @@
+'use client';
+
 import { useEffect, useState } from 'react';
 import { FaCheckCircle, FaRegCircle, FaPlus } from 'react-icons/fa';
-import axios from 'axios';
 
-const TodoList = ({ userId }) => {
+const TodoList = () => {
   const [todos, setTodos] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [newTodo, setNewTodo] = useState({
-    text: '',
+    text: '',        // For Task Name
     description: '',
     recurrence: 'once',
-    date: '',
+    groupId: '',     // For Group
   });
+  const [groups, setGroups] = useState([]); // State to hold available groups
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchTodos = async () => {
-      try {
-        const response = await axios.get(`/api/todos/user/${userId}`);
-        setTodos(response.data);
-      } catch (err) {
-        console.error('Error fetching to-dos:', err);
-      }
-    };
-
     fetchTodos();
-  }, [userId]);
+    fetchGroups(); // Fetch groups when the component mounts
+  }, []);
 
-  const toggleComplete = async (id) => {
-    const todo = todos.find((todo) => todo._id === id);
+  const fetchTodos = async () => {
     try {
-      await axios.put(`/api/todos/${id}`, {
-        completed: !todo.completed,
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+
+      const response = await fetch('/api/todos', {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
       });
-      setTodos((prev) =>
-        prev.map((todo) =>
-          todo._id === id ? { ...todo, completed: !todo.completed } : todo
-        )
-      );
-    } catch (err) {
-      console.error('Error updating to-do:', err);
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch todos: ${response.statusText}`);
+      }
+
+      const todos = await response.json();
+      console.log('Fetched Todos:', todos);
+      setTodos(todos);
+    } catch (error) {
+      console.error('Error fetching todos:', error);
+      setError('Failed to load todos. Please try again later.');
     }
   };
 
+  const fetchGroups = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      
+      const response = await fetch('/api/groups', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to fetch groups');
+      }
+  
+      const fetchedGroups = await response.json();
+      console.log('Fetched Groups:', fetchedGroups); // Log the fetched groups
+      setGroups(fetchedGroups); // Set the groups state
+    } catch (error) {
+      console.error('Error fetching groups:', error);
+    }
+  };
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewTodo((prev) => ({ ...prev, [name]: value }));
+    setNewTodo(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/todos', { ...newTodo, userId });
-      setTodos((prev) => [...prev, response.data]);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+
+      const response = await fetch('/api/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          text: newTodo.text.trim(),
+          description: newTodo.description.trim(),
+          recurrence: newTodo.recurrence,
+          groupId: newTodo.groupId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorResponse = await response.json();
+        throw new Error(errorResponse.error || 'Failed to add todo');
+      }
+
+      const createdTodo = await response.json();
+      console.log('Created Todo:', createdTodo); // Log the created todo
+      await fetchTodos(); // Refresh the list after adding
       setIsModalOpen(false);
-      setNewTodo({ text: '', description: '', recurrence: 'once', date: '' });
+      setNewTodo({ text: '', description: '', recurrence: 'once', groupId: '' });
     } catch (err) {
-      console.error('Error adding new to-do:', err);
+      console.error('Error adding todo:', err);
+      setError('Failed to add todo. Please try again.');
     }
   };
 
   return (
     <div className="bg-pink-100 p-6 rounded-lg shadow-md relative">
       <h2 className="text-2xl font-semibold text-gray-800 mb-4">Upcoming Tasks</h2>
+
+      {error && (
+        <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">
+          {error}
+        </div>
+      )}
+
       <ul>
         {todos.map((todo) => (
-          <li
-            key={todo._id}
-            className="flex items-center mb-3 cursor-pointer"
-            onClick={() => toggleComplete(todo._id)}
-          >
+          <li key={todo._id} className="flex items-center mb-3">
             {todo.completed ? (
               <FaCheckCircle className="text-green-500 mr-3" />
             ) : (
@@ -82,9 +141,6 @@ const TodoList = ({ userId }) => {
               )}
               {todo.recurrence !== 'once' && (
                 <p className="text-sm text-gray-600">Recurs: {todo.recurrence}</p>
-              )}
-              {todo.date && (
-                <p className="text-sm text-gray-600">Date: {new Date(todo.date).toLocaleDateString()}</p>
               )}
             </div>
           </li>
@@ -106,7 +162,7 @@ const TodoList = ({ userId }) => {
                 name="text"
                 value={newTodo.text}
                 onChange={handleInputChange}
-                placeholder="Task name"
+                placeholder="Task Name"
                 className="w-full p-2 mb-2 border rounded"
                 required
               />
@@ -128,13 +184,18 @@ const TodoList = ({ userId }) => {
                 <option value="weekly">Weekly</option>
                 <option value="monthly">Monthly</option>
               </select>
-              <input
-                type="date"
-                name="date"
-                value={newTodo.date}
+              <select
+                name="groupId"
+                value={newTodo.groupId}
                 onChange={handleInputChange}
                 className="w-full p-2 mb-4 border rounded"
-              />
+                required
+              >
+                <option value="">Select Group</option>
+                {groups.map((group) => (
+                  <option key={group._id} value={group._id}>{group.name}</option>
+                ))}
+              </select>
               <div className="flex justify-end">
                 <button
                   type="button"

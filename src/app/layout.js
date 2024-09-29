@@ -19,7 +19,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
 export default function RootLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -28,40 +27,29 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('token');
-      setIsAuthorized(!!token);
+      setIsAuthorized(!!token); // Set isAuthorized based on token presence
 
-      // Redirect if not authorized
+      // Redirect if not authorized and trying to access restricted routes
       if (!token && pathname !== '/login' && pathname !== '/register') {
         router.push('/register');
       }
     };
 
-    // Check auth status initially
+    // Check auth status on initial load
     checkAuth();
 
-    // Set up event listener for storage changes
+    // Listen for storage changes (e.g., when the token is updated during login)
     const storageListener = () => checkAuth();
     window.addEventListener('storage', storageListener);
 
-    // Clean up event listener
+    // Clean up the event listener on unmount
     return () => window.removeEventListener('storage', storageListener);
   }, [router, pathname]);
-
-  // Custom event listener for login
-  useEffect(() => {
-    const handleLogin = () => {
-      setIsAuthorized(true);
-    };
-
-    window.addEventListener('login', handleLogin);
-
-    // Clean up event listener
-    return () => window.removeEventListener('login', handleLogin);
-  }, []);
 
   return (
     <html lang="en">
       <body className="flex">
+        {/* Show sidebar only if the user is authorized */}
         {isAuthorized && <Sidebar />}
         <main className="flex-1 bg-slate-50 min-h-screen p-6">
           {children}

@@ -1,18 +1,28 @@
-// lib/mongodb.js
+// src/utils/dbConnect.js
 import mongoose from 'mongoose';
 
-const connectDB = async () => {
-  if (mongoose.connections[0].readyState) return;
+const MONGODB_URI = process.env.MONGODB_URI; // Make sure to set this in your environment variables
+
+if (!MONGODB_URI) {
+  throw new Error('Please define the MONGODB_URI environment variable inside .env.local');
+}
+
+let isConnected; // Track the connection status
+
+export const dbConnect = async () => {
+  if (isConnected) {
+    return;
+  }
 
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
     });
-    console.log('MongoDB connected successfully');
+    isConnected = true;
+    console.log('MongoDB connected');
   } catch (error) {
     console.error('MongoDB connection error:', error);
+    throw new Error('MongoDB connection error');
   }
 };
-
-export default connectDB;
