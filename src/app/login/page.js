@@ -2,17 +2,22 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
-const Login = () => {
+const AuthPage = () => {
+  const router = useRouter();
+  const [isLogin, setIsLogin] = useState(true);
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    setError('');
+    setErrorMessage('');
+    setSuccessMessage('');
     setIsLoading(true);
 
     try {
@@ -37,56 +42,130 @@ const Login = () => {
       } else {
         const errorData = await response.json();
         if (response.status === 404) {
-          setError('User not found. Please register.');
+          setErrorMessage('User not found. Please register.');
         } else {
-          setError('Invalid credentials. Please try again.');
+          setErrorMessage('Invalid credentials. Please try again.');
         }
       }
     } catch (error) {
       console.error('Login error:', error);
-      setError('An unexpected error occurred. Please try again.');
+      setErrorMessage('An unexpected error occurred. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async (e) => {
+    e.preventDefault();
+    setErrorMessage('');
+    setSuccessMessage('');
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        localStorage.setItem('token', data.token); // Assuming the API returns a token
+        setSuccessMessage('User registered successfully! You can now log in.');
+        setErrorMessage('');
+        setUsername('');
+        setPassword('');
+        setIsLogin(true); // Switch to login form
+      } else {
+        const errorData = await res.json();
+        setErrorMessage(errorData.error || 'Registration failed. Please try again.');
+      }
+    } catch (error) {
+      console.error('Registration error:', error);
+      setErrorMessage('An unexpected error occurred. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl text-black mb-4 text-center">Login</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="w-full text-black p-2 border rounded mb-4"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full text-black p-2 border rounded mb-4"
-          required
-        />
-        <button 
-          type="submit" 
-          className="w-full p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-          disabled={isLoading}
-        >
-          {isLoading ? 'Logging in...' : 'Login'}
-        </button>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-green-300">
+      <Image src="/hackUMBC.png" alt="HackUMBC Logo" width={500} height={500} className="mb-4" />
+
+      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md border border-green-300">
+        <h2 className="text-3xl font-extrabold text-center text-green-800 mb-8">
+          {isLogin ? '🌱 Login to Plant Sync' : '🌱 Join Plant Sync'}
+        </h2>
+
+        {errorMessage && <p className="text-red-500 text-center mb-4">{errorMessage}</p>}
+        {successMessage && <p className="text-green-500 text-center mb-4">{successMessage}</p>}
+
+        <form onSubmit={isLogin ? handleLogin : handleRegister} className="space-y-6">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-green-700">
+              Username
+            </label>
+            <input
+              id="username"
+              type="text"
+              placeholder="Enter your username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              required
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-green-700">
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+            disabled={isLoading}
+          >
+            {isLoading ? (isLogin ? 'Logging in...' : 'Registering...') : isLogin ? 'Login' : 'Register'}
+          </button>
+        </form>
+
         <p className="mt-4 text-black text-center">
-          Don&apos;t have an account?{' '}
-          <a href="/register" className="text-blue-500 hover:underline">
-            Register here
-          </a>
+          {isLogin ? (
+            <>
+              Don&apos;t have an account?{' '}
+              <button
+                type="button"
+                className="font-medium text-green-800 hover:text-green-700"
+                onClick={() => setIsLogin(false)}
+              >
+                Register here
+              </button>
+            </>
+          ) : (
+            <>
+              Already have an account?{' '}
+              <button
+                type="button"
+                className="font-medium text-green-800 hover:text-green-700"
+                onClick={() => setIsLogin(true)}
+              >
+                Login here
+              </button>
+            </>
+          )}
         </p>
-      </form>
+      </div>
     </div>
   );
 };
 
-export default Login;
+export default AuthPage;

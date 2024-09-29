@@ -1,5 +1,6 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+
+const { Schema } = mongoose;
 
 const groupSchema = new Schema({
   groupName: { type: String, required: true },
@@ -8,4 +9,7 @@ const groupSchema = new Schema({
   plants: [{ type: Schema.Types.ObjectId, ref: 'Plant' }] // References to Plant
 });
 
-module.exports = mongoose.model('Group', groupSchema);
+// Prevent OverwriteModelError by checking if the model already exists
+const Group = mongoose.models.Group || mongoose.model('Group', groupSchema);
+
+export default Group;

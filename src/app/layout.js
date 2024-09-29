@@ -1,4 +1,3 @@
-// app/layout.js
 'use client';
 
 import localFont from "next/font/local";
@@ -19,7 +18,6 @@ const geistMono = localFont({
   weight: "100 900",
 });
 
-
 export default function RootLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -28,22 +26,22 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('token');
-      setIsAuthorized(!!token);
+      setIsAuthorized(!!token); // Set isAuthorized based on token presence
 
-      // Redirect if not authorized
+      // Redirect if not authorized and trying to access restricted routes
       if (!token && pathname !== '/login' && pathname !== '/register') {
         router.push('/register');
       }
     };
 
-    // Check auth status initially
+    // Check auth status on initial load
     checkAuth();
 
-    // Set up event listener for storage changes
+    // Listen for storage changes (e.g., when the token is updated during login)
     const storageListener = () => checkAuth();
     window.addEventListener('storage', storageListener);
 
-    // Clean up event listener
+    // Clean up the event listener on unmount
     return () => window.removeEventListener('storage', storageListener);
   }, [router, pathname]);
 
@@ -59,11 +57,16 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('login', handleLogin);
   }, []);
 
+  // Determine the background class based on the current path
+  const backgroundClass = pathname === '/register' || pathname === '/login'
+    ? 'bg-gradient-to-br from-green-100 to-green-300'
+    : 'bg-slate-50';
+
   return (
     <html lang="en">
-      <body className="flex">
+      <body className={`flex ${backgroundClass}`}>
         {isAuthorized && <Sidebar />}
-        <main className="flex-1 bg-slate-50 min-h-screen p-6">
+        <main className="flex-1 min-h-screen p-6">
           {children}
         </main>
       </body>

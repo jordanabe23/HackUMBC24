@@ -4,7 +4,7 @@ const User = require('../models/user');
 const bcrypt = require('bcrypt');
 
 // Registration endpoint
-router.post('/register', async (req, res) => {
+router.post('/login', async (req, res) => {
   console.log('Register request received:', req.body); // Check if request reaches the server
   const { username, password } = req.body;
 
