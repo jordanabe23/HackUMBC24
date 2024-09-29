@@ -20,6 +20,7 @@
         "mongoose": "^8.7.0",
         "next": "14.2.13",
         "next-auth": "^4.24.8",
+        "openai": "^4.65.0",
         "react": "^18",
         "react-calendar": "^5.0.0",
         "react-countup": "^6.5.3",
