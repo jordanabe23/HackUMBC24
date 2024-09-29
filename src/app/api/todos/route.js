@@ -1,6 +1,6 @@
 import { dbConnect } from '../../lib/dbConnect';
 import Todo from '../../../../models/todo';
-import User from '../../../../models/user'; // Assuming you have a User model
+import User from '../../../../models/user';
 import jwt from 'jsonwebtoken';
 
 const authenticateUser = (request) => {
@@ -39,8 +39,7 @@ export async function GET(request) {
   try {
     const userId = authenticateUser(request);
     
-    // Fetch the user's information including their group IDs
-    const user = await User.findById(userId).select('groups'); // Fetch groups only
+    const user = await User.findById(userId).select('groups');
     if (!user) {
       return new Response(
         JSON.stringify({ error: 'User not found.' }),
@@ -49,9 +48,8 @@ export async function GET(request) {
     }
 
     const groupIds = user.groups; // Get the list of group IDs
-    console.log(groupIds);
-    // Fetch todos that match the user's group IDs
-    const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ createdAt: -1 });
+
+    const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ created: -1 });
 
     return new Response(JSON.stringify(todos), {
       status: 200,
@@ -67,7 +65,7 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
-  await dbConnect(); // Ensure database connection
+  await dbConnect();
 
   try {
     const userId = authenticateUser(request);
@@ -80,15 +78,13 @@ export async function POST(request) {
 
     const body = await request.json();
 
-    // Validate required fields
-    if (!body.text || typeof body.text !== 'string' || body.text.trim() === '') {
+    if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
       return new Response(
         JSON.stringify({ error: 'Task name is required and must be a non-empty string.' }),
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
 
-    // Check if groupId is present
     if (!body.groupId || typeof body.groupId !== 'string' || body.groupId.trim() === '') {
       return new Response(
         JSON.stringify({ error: 'Group ID is required.' }),
@@ -96,7 +92,6 @@ export async function POST(request) {
       );
     }
 
-    // Fetch the user's information to validate the group ID
     const user = await User.findById(userId).select('groups');
     if (!user) {
       return new Response(
@@ -105,8 +100,7 @@ export async function POST(request) {
       );
     }
 
-    const validGroupIds = user.groups; // Get valid group IDs
-
+    const validGroupIds = user.groups;
     if (!validGroupIds.includes(body.groupId)) {
       return new Response(
         JSON.stringify({ error: 'Invalid group ID.' }),
@@ -114,15 +108,15 @@ export async function POST(request) {
       );
     }
 
-    // Create a new Todo instance
     const newTodo = new Todo({
-      text: body.text.trim(),
+      name: body.name.trim(),
       description: body.description ? body.description.trim() : '',
       recurrence: ['once', 'daily', 'weekly', 'monthly'].includes(body.recurrence) ? body.recurrence : 'once',
-      date: new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate()),
+      created: new Date(),
       completed: false,
-      userId, // Associate with the authenticated user
-      groupId: body.groupId, // Include groupId in the new Todo
+      last_check: null, // Default as null
+      groupId: body.groupId,
+      userId,
     });
 
     await newTodo.save();
