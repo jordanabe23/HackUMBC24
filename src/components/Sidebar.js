@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaLeaf, FaSignOutAlt, FaPagelines } from 'react-icons/fa';
+import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaSignOutAlt, FaPagelines, FaComment } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Initially expanded
@@ -13,7 +13,7 @@ const Sidebar = () => {
 
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/' },
-    { name: 'Chat', icon: <FaPagelines />, path: '/chat' },
+    { name: 'Chat', icon: <FaComment />, path: '/chat' },
     { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'People', icon: <FaUsers />, path: '/people' },
     { name: 'Settings', icon: <FaCog />, path: '/settings' }
@@ -39,7 +39,7 @@ const Sidebar = () => {
   return (
     <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000 flex flex-col justify-between h-screen`}>
       <div>
-        <FaLeaf
+        <FaPagelines
           className={`absolute cursor-pointer -right-3 top-9 w-10 h-10 p-1 border-2 rounded-full
             border-green-600 bg-green-200 text-green-900
             transition-transform duration-500 ease-in-out
@@ -50,8 +50,7 @@ const Sidebar = () => {
           onClick={() => setIsExpanded(!isExpanded)}
         />
         <div className="flex items-center gap-x-4">
-          <FaPagelines className="text-2xl text-gray-800" />
-          {isExpanded && <span className="text-gray-800 text-xl font-bold">Reminders</span>}
+          {isExpanded && <span className="text-gray-800 text-xl font-bold text-center">Reminders</span>}
         </div>
         <ul className="pt-6">
           {menuItems.map((item, index) => {
