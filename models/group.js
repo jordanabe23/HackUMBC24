@@ -4,7 +4,7 @@ const { Schema } = mongoose;
 
 const groupSchema = new Schema({
   groupName: { type: String, required: true },
-  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo', required: true }], // References to Todo
+  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }], // Removed `required: true` for reference array
 });
 
 // Prevent OverwriteModelError by checking if the model already exists
