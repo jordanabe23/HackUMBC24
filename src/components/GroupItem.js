@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { FaCheckCircle, FaRegCircle } from 'react-icons/fa';
 
 const GroupItem = ({ group }) => {
     const { name, _id } = group; // Destructure group name and group ID
@@ -46,7 +45,6 @@ const GroupItem = ({ group }) => {
     }, [_id]); // Dependency array: run fetchTodos whenever group ID changes
 
     // Function to handle adding a new todo to the group
-    // Function to handle adding a new todo to the group
     const handleAddTodo = async () => {
         if (!newTodo.trim() || !newDescription.trim() || !newRecurrence.trim()) {
             alert("Please enter a todo name, description, and recurrence.");
@@ -85,8 +83,8 @@ const GroupItem = ({ group }) => {
         }
     };
 
-
-    const toggleCompleted = async (todoId, currentStatus) => {
+    // Function to toggle completion status
+    const toggleCompleted = async (todoId) => {
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`/api/todos/${todoId}`, {
@@ -96,21 +94,23 @@ const GroupItem = ({ group }) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    completed: !currentStatus // Toggle the current completed status
+                    completed: true // Mark as completed
                 })
             });
 
             if (!response.ok) throw new Error('Failed to update todo');
 
-            const updatedTodo = await response.json();
-
-            // Update the todo list with the new completed status
-            setTodos(todos.map(todo => (todo._id === updatedTodo._id ? updatedTodo : todo)));
+            // Update the todo list after completion
+            setTodos(todos.map(todo => {
+                if (todo._id === todoId) {
+                    return { ...todo, completed: true }; // Set completed to true
+                }
+                return todo;
+            }));
         } catch (err) {
             console.error('Error updating todo:', err.message);
         }
     };
-
 
     return (
         <div className="group-item bg-white shadow-lg rounded-lg p-4 mb-4">
@@ -123,29 +123,26 @@ const GroupItem = ({ group }) => {
                 <ul>
                     {todos.map((todo) => (
                         <li key={todo._id} className="flex items-center mb-2">
-                            <span
-                                onClick={() => toggleCompleted(todo._id, todo.completed)} // Toggle the completed status on click
-                                className="cursor-pointer"
+                            <button
+                                onClick={() => toggleCompleted(todo._id)} // Toggle and make the button white
+                                className={`cursor-pointer bg-${todo.completed ? 'white' : 'blue-500'} text-${todo.completed ? 'white' : 'white'} p-2 rounded`}
                             >
-                                {todo.completed ? (
-                                    <FaCheckCircle className="text-green-500 mr-2" />
-                                ) : (
-                                    <FaRegCircle className="text-gray-500 mr-2" />
-                                )}
-                            </span>
-                            <div>
-                                <p className={todo.completed ? 'line-through text-gray-500' : 'text-gray-800'}>
+                                Mark as Done
+                            </button>
+                            <div className="ml-2">
+                                {/* Always set the text color to black */}
+                                <p className="text-black">
                                     {todo.name}
                                 </p>
                                 {todo.description && (
-                                    <p className="text-sm text-gray-600">{todo.description}</p>
+                                    <p className="text-black">{todo.description}</p>
                                 )}
                             </div>
                         </li>
                     ))}
                 </ul>
             ) : (
-                <p>No todos available for this group.</p>
+                <p className="text-black"> No todos available for this group.</p>
             )}
 
             {/* Input fields and button for adding new todo */}
@@ -155,21 +152,21 @@ const GroupItem = ({ group }) => {
                     value={newTodo}
                     onChange={(e) => setNewTodo(e.target.value)} // Update state on name input change
                     placeholder="Todo name"
-                    className="border border-gray-300 p-2 rounded w-full mb-2"
+                    className="border border-gray-300 p-2 rounded w-full mb-2 text-black"
                 />
                 <input
                     type="text"
                     value={newDescription}
                     onChange={(e) => setNewDescription(e.target.value)} // Update state on description input change
                     placeholder="Todo description"
-                    className="border border-gray-300 p-2 rounded w-full mb-2"
+                    className="border border-gray-300 p-2 rounded w-full mb-2 text-black" // Ensuring text is black
                 />
                 <input
                     type="text"
                     value={newRecurrence}
                     onChange={(e) => setNewRecurrence(e.target.value)} // Update state on recurrence input change
                     placeholder="Recurrence (e.g., Daily, Weekly)"
-                    className="border border-gray-300 p-2 rounded w-full mb-2"
+                    className="border border-gray-300 p-2 rounded w-full mb-2 text-black" // Ensuring text is black
                 />
                 <button
                     onClick={handleAddTodo}
