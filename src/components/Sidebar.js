@@ -1,9 +1,7 @@
-'use client';
-
 import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaHome, FaCalendarAlt, FaUsers, FaCog, FaSignOutAlt, FaPagelines, FaComment, FaPlusCircle } from 'react-icons/fa';
+import { FaHome, FaComment, FaUsers, FaSignOutAlt, FaPagelines, FaPlusCircle } from 'react-icons/fa';
 
 const Sidebar = () => {
   const [isExpanded, setIsExpanded] = useState(true); // Initially expanded
@@ -11,16 +9,24 @@ const Sidebar = () => {
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [groupName, setGroupName] = useState(''); // Group name state
   const [error, setError] = useState(null); // Error state for form
+  const [hideSidebar, setHideSidebar] = useState(false); // State to track whether to hide the sidebar
   const router = useRouter();
   const pathname = usePathname();
 
   const menuItems = [
     { name: 'Dashboard', icon: <FaHome />, path: '/' },
     { name: 'Chat', icon: <FaComment />, path: '/chat' },
-
-
     { name: 'Plants', icon: <FaUsers />, path: '/people' },
   ];
+
+  // Hide sidebar if the pathname includes 'login'
+  useEffect(() => {
+    if (pathname.includes('/login')) {
+      setHideSidebar(true);
+    } else {
+      setHideSidebar(false);
+    }
+  }, [pathname]);
 
   function handleLogout() {
     // Clear the JWT token from local storage
@@ -58,8 +64,6 @@ const Sidebar = () => {
       setGroupName('');
       setIsModalOpen(false);
       setError(null);
-
-      // You can also redirect or refresh the group list here if needed
     } catch (err) {
       setError(err.message || 'Failed to create group. Please try again later.');
     }
@@ -74,6 +78,10 @@ const Sidebar = () => {
       }, 4000); // Optional delay of 1 second for visibility
     }
   }, [hasCollapsedOnce]);
+
+  if (hideSidebar) {
+    return null;
+  }
 
   return (
     <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000 flex flex-col justify-between h-screen`}>
