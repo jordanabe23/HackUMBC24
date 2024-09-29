@@ -65,7 +65,7 @@ const AuthPage = () => {
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password }),
+        body: JSON.stringify({ username, password, group: [] }), // Adding empty 'group' array
       });
 
       if (res.ok) {

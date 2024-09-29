@@ -14,6 +14,7 @@ app.use(cors());
 mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  autoIndex: true,  // Ensure this is set to true
 })
   .then(() => console.log('MongoDB connected!'))
   .catch((err) => console.log(err));
