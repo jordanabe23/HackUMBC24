@@ -40,14 +40,9 @@ export async function GET(request) {
 
   try {
     const userId = authenticateUser(request);
-<<<<<<< Updated upstream
-    
-    const user = await User.findById(userId).select('groups');
-=======
 
     // Fetch the user's information including their group IDs
-    const user = await User.findById(userId).select('groups'); // Fetch groups only
->>>>>>> Stashed changes
+    const user = await User.findById(userId).select('groups');
     if (!user) {
       return new Response(
         JSON.stringify({ error: 'User not found.' }),
@@ -56,15 +51,9 @@ export async function GET(request) {
     }
 
     const groupIds = user.groups; // Get the list of group IDs
-<<<<<<< Updated upstream
-
-    const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ created: -1 });
-=======
-    console.log('Groups:', groupIds);
 
     // Fetch todos that match the user's group IDs
     const todos = await Todo.find({ groupId: { $in: groupIds } }).sort({ createdAt: -1 });
->>>>>>> Stashed changes
 
     return new Response(JSON.stringify(todos), {
       status: 200,
@@ -88,10 +77,7 @@ export async function POST(request) {
 
     const body = await request.json();
 
-<<<<<<< Updated upstream
-=======
     // Validate required fields
->>>>>>> Stashed changes
     if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
       return new Response(
         JSON.stringify({ error: 'Todo name is required and must be a non-empty string.' }),
@@ -99,7 +85,6 @@ export async function POST(request) {
       );
     }
 
-<<<<<<< Updated upstream
     if (!body.groupId || typeof body.groupId !== 'string' || body.groupId.trim() === '') {
       return new Response(
         JSON.stringify({ error: 'Group ID is required.' }),
@@ -123,6 +108,7 @@ export async function POST(request) {
       );
     }
 
+    // Create a new Todo instance with the provided data
     const newTodo = new Todo({
       name: body.name.trim(),
       description: body.description ? body.description.trim() : '',
@@ -132,16 +118,6 @@ export async function POST(request) {
       last_check: null, // Default as null
       groupId: body.groupId,
       userId,
-=======
-    // Create a new Todo instance with the provided data
-    const newTodo = new Todo({
-      name: body.name.trim(), // Ensure the name is a trimmed string
-      description: body.description ? body.description.trim() : '', // Optional description
-      recurrence: body.recurrence || 'once', // Default to 'once' if recurrence is not provided
-      completed: false, // Newly created todos are not completed
-      userId, // Associate the Todo with the authenticated user
-      groupId: body.groupId // Make sure this field is passed in the request body
->>>>>>> Stashed changes
     });
 
     await newTodo.save();
@@ -158,8 +134,6 @@ export async function POST(request) {
     );
   }
 }
-<<<<<<< Updated upstream
-=======
 
 // PUT request handler to update 'completed' status of a todo
 export async function PUT(request) {
@@ -220,4 +194,3 @@ export async function PUT(request) {
     );
   }
 }
->>>>>>> Stashed changes
