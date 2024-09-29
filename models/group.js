@@ -3,10 +3,8 @@ import mongoose from 'mongoose';
 const { Schema } = mongoose;
 
 const groupSchema = new Schema({
-  groupName: { type: String, required: true },
-  members: [{ type: Schema.Types.ObjectId, ref: 'User' }], // References to User
-  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }], // References to Todo
-  plants: [{ type: Schema.Types.ObjectId, ref: 'Plant' }] // References to Plant
+  groupName: { type: String, required: true }, // Ensure 'required' is spelled correctly
+  todos: [{ type: Schema.Types.ObjectId, ref: 'Todo' }], // No need for 'required: true' in arrays of references
 });
 
 // Prevent OverwriteModelError by checking if the model already exists

@@ -1,32 +1,90 @@
-/* styles/Calendar.css */
+/* Custom styles for the Calendar component */
 .react-calendar {
-    width: 100%;
-    border: none;
-    border-radius: 0.5rem;
-    background-color: #f3f4f6; /* bg-slate-100 */
-  }
-  
-  .react-calendar__tile {
-    height: 80px;
-    max-width: 100%;
-    background: none;
-    text-align: center;
-    padding: 10px 0;
-    border-radius: 0.375rem;
-  }
-  
-  .react-calendar__tile--active {
-    background: #60a5fa; /* bg-blue-400 */
-    color: white;
-  }
-  
-  .react-calendar__tile--now {
-    background: #34d399; /* bg-green-400 */
-    color: white;
-  }
-  
-  .react-calendar__tile--hasActive {
-    background: #fbbf24; /* bg-yellow-400 */
-    color: white;
-  }
-  
+  background-color: #ffffff; /* White background for the entire calendar */
+  border-radius: 8px; /* Optional: to match the rounded corners of the container */
+  height: 400px; /* Set a fixed height for the calendar */
+  width: 100%; /* Make the calendar full width */
+  max-width: 900px; /* Set a maximum width */
+  margin: 0 auto; /* Center the calendar */
+  color: #2e8b57; /* Lighter green color for calendar text */
+}
+
+.react-calendar__navigation {
+  background-color: #e0ffe0; /* Light green background for navigation */
+  color: #2e8b57; /* Lighter green text for navigation */
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #2e8b57; /* Lighter green text for weekends */
+}
+
+.react-calendar__tile {
+  width: 30px; /* Increase width for tiles */
+  height: 50px; /* Increase height for tiles */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #2e8b57; /* Lighter green text color for current month dates */
+  position: relative; /* Needed for dot indicator positioning */
+  cursor: pointer; /* Pointer cursor on hover */
+  padding: 0; /* Remove extra padding */
+  margin: 0; /* Remove margin */
+  overflow: hidden; /* Prevent text overflow */
+  box-sizing: border-box; /* Include padding and border in element's total width and height */
+  font-size: 18px; /* Adjust the font size */
+  line-height: 1.2; /* Ensure proper line height */
+}
+
+.react-calendar__tile--neighboringMonth {
+  color: #b95203 !important; /* Set the text color of neighboring month's dates to red */
+}
+
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #b95203 !important; /* Red for neighboring month dates */
+}
+
+.react-calendar__tile--active {
+  background-color: #add8e6 !important; /* Set active date background color to light blue */
+  color: #000 !important; /* Set active date text color to black */
+}
+
+.react-calendar__month-view__days__day--otherMonth {
+  color: #b95203 !important; /* Style for other month's dates */
+}
+
+.current-month {
+  color: #2e8b57; /* Lighter green text for current month dates */
+}
+
+.dot-indicator {
+  position: absolute; /* Position the dot within the tile */
+  bottom: 10px; /* Place the dot at the bottom */
+  width: 8px; /* Size of the dot */
+  height: 8px;
+  border-radius: 50%; /* Make the dot round */
+  background-color: blue; /* Dot color */
+}
+
+.react-calendar__tile:enabled:hover {
+  background-color: #87cefa !important; /* Hover background color change to a lighter blue */
+}
+
+.calendar-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto; /* Adjust height automatically */
+}
+
+.to-do-container {
+  min-height: 80px; /* Minimum height for the to-do container */
+  max-height: auto; /* Allow dynamic height based on content */
+}
+
+.bg-light-green {
+  background-color: #f0f8f5; /* Light green background for the to-do container */
+}
+
+.text-dark-green {
+  color: #006400; /* Dark green text color */
+}

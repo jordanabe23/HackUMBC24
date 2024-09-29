@@ -40,11 +40,9 @@ const TodoList = () => {
       }
 
       const todos = await response.json();
-      console.log('Fetched Todos:', todos);
       setTodos(todos);
       await fetchSuggestions(todos); // Fetch suggestions after todos are loaded
     } catch (error) {
-      console.error('Error fetching todos:', error);
       setError('Failed to load todos. Please try again later.');
     }
   };
@@ -78,7 +76,7 @@ const TodoList = () => {
   const fetchGroups = async () => {
     try {
       const token = localStorage.getItem('token');
-      
+
       const response = await fetch('/api/groups', {
         method: 'GET',
         headers: {
@@ -86,19 +84,18 @@ const TodoList = () => {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch groups');
       }
-  
+
       const fetchedGroups = await response.json();
-      console.log('Fetched Groups:', fetchedGroups);
       setGroups(fetchedGroups);
     } catch (error) {
       console.error('Error fetching groups:', error);
     }
   };
-  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewTodo(prev => ({ ...prev, [name]: value }));
@@ -131,20 +128,17 @@ const TodoList = () => {
         throw new Error(errorResponse.error || 'Failed to add todo');
       }
 
-      const createdTodo = await response.json();
-      console.log('Created Todo:', createdTodo);
       await fetchTodos(); // Refresh the list after adding
       setIsModalOpen(false);
       setNewTodo({ text: '', description: '', recurrence: 'once', groupId: '' });
     } catch (err) {
-      console.error('Error adding todo:', err);
       setError('Failed to add todo. Please try again.');
     }
   };
 
   return (
-    <div className="bg-pink-100 p-6 rounded-lg shadow-md relative">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Upcoming Tasks</h2>
+    <div className="bg-green-100 p-6 rounded-lg shadow-md relative">
+      <h2 className="text-2xl font-semibold text-green-800 mb-4">Upcoming Tasks</h2>
 
       {error && (
         <div className="mb-4 p-2 bg-red-200 text-red-800 rounded">
@@ -179,14 +173,14 @@ const TodoList = () => {
       </ul>
       <button
         onClick={() => setIsModalOpen(true)}
-        className="absolute bottom-4 right-4 bg-blue-500 text-white p-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors"
+        className="absolute bottom-4 right-4 bg-green-500 text-white p-2 rounded-full shadow-lg hover:bg-green-600 transition-colors"
       >
         <FaPlus />
       </button>
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg w-96">
-            <h3 className="text-xl font-semibold mb-4">Add New Task</h3>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg w-96 relative z-60 shadow-lg border-green-500 border-4">
+            <h3 className="text-xl font-semibold mb-4 text-green-700">Add New Task</h3>
             <form onSubmit={handleSubmit}>
               <input
                 type="text"
@@ -194,7 +188,7 @@ const TodoList = () => {
                 value={newTodo.text}
                 onChange={handleInputChange}
                 placeholder="Task Name"
-                className="w-full p-2 mb-2 border rounded"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
                 required
               />
               <textarea
@@ -202,13 +196,14 @@ const TodoList = () => {
                 value={newTodo.description}
                 onChange={handleInputChange}
                 placeholder="Description"
-                className="w-full p-2 mb-2 border rounded"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
+                style={{ minWidth: '300px', minHeight: '100px', maxHeight: '300px' }}
               />
               <select
                 name="recurrence"
                 value={newTodo.recurrence}
                 onChange={handleInputChange}
-                className="w-full p-2 mb-2 border rounded"
+                className="w-full p-2 mb-2 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
               >
                 <option value="once">Once</option>
                 <option value="daily">Daily</option>
@@ -219,7 +214,7 @@ const TodoList = () => {
                 name="groupId"
                 value={newTodo.groupId}
                 onChange={handleInputChange}
-                className="w-full p-2 mb-4 border rounded"
+                className="w-full p-2 mb-4 border border-green-300 rounded focus:outline-none focus:border-green-500 text-gray-900"
                 required
               >
                 <option value="">Select Group</option>
@@ -237,7 +232,7 @@ const TodoList = () => {
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+                  className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
                 >
                   Add Task
                 </button>

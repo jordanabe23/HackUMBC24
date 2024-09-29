@@ -119,7 +119,7 @@ export async function POST(request) {
       text: body.text.trim(),
       description: body.description ? body.description.trim() : '',
       recurrence: ['once', 'daily', 'weekly', 'monthly'].includes(body.recurrence) ? body.recurrence : 'once',
-      date: body.date ? new Date(body.date) : null,
+      date: new Date((new Date()).getFullYear(), (new Date()).getMonth(), (new Date()).getDate()),
       completed: false,
       userId, // Associate with the authenticated user
       groupId: body.groupId, // Include groupId in the new Todo

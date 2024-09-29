@@ -1,21 +1,68 @@
 MIT License
 
-Copyright (c) 2024 Mihir Mahesh
+Permission Notice and General Rights
+Permission is hereby granted, free of charge, to any person, individual, group, company, organization, corporation, institution, or any other entity (collectively referred to as "Person" or "Persons") obtaining a copy of this software (the "Software") and any accompanying or associated documentation files, whether those files are digital, physical, or any other form of documentation that may describe, explain, or support the use and function of the Software, to interact with, use, and otherwise deal in the Software without restriction.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+This permission extends without limitation to all of the following actions, whether performed separately, in combination with one another, or in any sequence, by any authorized person:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+The right to use the Software for any lawful purpose, which includes but is not limited to personal, professional, commercial, educational, or other legal activities, either publicly or privately. The Software may be used on any device, system, or hardware configuration, regardless of the type of computer system, operating system, or other technological environment where it may be installed or executed.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+The right to copy the Software, meaning any individual or group may make an exact duplicate of the Software, including but not limited to its source code, binaries, and associated files. Copies of the Software may be made for archival purposes, backup purposes, distribution, or any other reason as determined by the user.
+
+The right to modify the Software. This means any Person may alter, change, amend, extend, refactor, or transform the original source code or associated files of the Software in any way they see fit. The modifications may include but are not limited to improvements, bug fixes, feature additions, performance optimizations, user interface changes, and integration with other software or systems.
+
+The right to merge the Software with other software. This means that a Person may combine or incorporate the Software, whether modified or unmodified, with other software, systems, or codebases to create a new software product or application that includes, integrates, or relies upon the Software.
+
+The right to publish the Software, including making it available to the public by any means, whether in its original form or a modified version, through any media or platform. This may include distributing the Software through the Internet, electronic distribution channels, physical media, or any other method of publication. Any publication is subject to the inclusion of appropriate copyright notices.
+
+The right to distribute the Software. Persons may share the Software with others, either for free or for a fee, in any form or format, whether digital or physical. Distribution includes but is not limited to making the Software available for download from websites, repositories, or other digital storage systems, as well as distributing physical copies via disks, USB drives, or other media.
+
+The right to sublicense the Software. This means that a Person may grant third parties the rights to use, modify, distribute, or otherwise deal in the Software as permitted by this License. The original user may act as an intermediary, extending the permissions granted by this License to other individuals or organizations. This can be done with or without financial compensation.
+
+The right to sell copies of the Software. Any Person may sell the Software, whether modified or unmodified, in any marketplace, venue, or medium, subject to applicable laws and regulations governing the sale of software. The sale of the Software may be direct, through third-party vendors, or via digital or physical stores, provided that the copyright and license terms are adhered to as stipulated below.
+
+Conditions and Requirements for Use
+This permission is granted provided that the following conditions are met. These conditions are essential to the continued use, modification, and distribution of the Software under this License:
+
+Inclusion of Copyright Notice:
+The above copyright notice, specifying the year 2024 and the original author and copyright holder, Mihir Mahesh, must be retained in all copies or substantial portions of the Software. This notice must remain intact and unaltered, regardless of whether the Software has been modified, translated, or otherwise changed. The purpose of this requirement is to ensure proper attribution and acknowledgment of the original creator.
+
+Inclusion of License Text:
+This permission notice, in its entirety, must accompany all copies, whether digital, printed, or otherwise reproduced, of the Software or substantial portions thereof. The inclusion of this License text ensures that any recipient of the Software is made aware of their rights and obligations under the terms of this License. Failure to include this notice constitutes a violation of the License's terms.
+
+Substantial Portions of Software:
+A "substantial portion" of the Software refers to any significant part of the Software's source code, documentation, or associated files. This may include, but is not limited to, core functionality, essential algorithms, or major sections of the user interface. For example, if a Person distributes a modified version of the Software that includes a substantial portion of the original, they must ensure that the copyright notice and this License text are included with their distribution.
+
+Warranty Disclaimer and Limitation of Liability
+THE SOFTWARE IS PROVIDED "AS IS," WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT.
+
+This means that the Software is provided to the recipient in its current state and condition at the time of distribution. The author, copyright holder, and any other contributors make no guarantees or promises about the Software's performance, reliability, or suitability for any particular task or application. Specifically:
+
+No Express Warranty:
+There is no explicit guarantee that the Software will perform as described, nor that it will meet the user's specific needs or requirements. The author does not warrant that the Software will be free from errors, bugs, security vulnerabilities, or other defects. Users are responsible for assessing the suitability of the Software for their intended purposes.
+
+No Implied Warranty of Merchantability:
+The term "merchantability" refers to the idea that a product is suitable for sale and meets a basic level of quality. Under this License, no such warranty is provided. The Software is not guaranteed to be market-ready, and the author is not responsible for any failure of the Software to function in a commercial environment.
+
+No Implied Warranty of Fitness for a Particular Purpose:
+"Fitness for a particular purpose" refers to the expectation that a product will work for a specific task. In this case, the author makes no guarantees that the Software will perform any particular function or achieve any specific outcome. Users assume all responsibility for determining whether the Software is appropriate for their intended use case.
+
+No Warranty of Noninfringement:
+The author does not guarantee that the Software does not infringe upon the intellectual property rights of third parties, including but not limited to patents, copyrights, trademarks, or trade secrets. Users are advised to ensure that their use of the Software does not violate the legal rights of others.
+
+Limitation of Liability
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+This clause protects the author and any contributors to the Software from legal liability in the event that the Software causes harm or damage. Specifically:
+
+No Liability for Claims:
+The author is not responsible for any legal claims made against the user or distributor of the Software, whether those claims arise from the Software's use, performance, or failure.
+
+No Liability for Damages:
+The author is not responsible for any damages, whether direct, indirect, incidental, consequential, or punitive, that may result from the use, modification, or distribution of the Software. This includes but is not limited to financial losses, lost profits, loss of data, damage to hardware or software systems, and any other harm or injury caused by the Software.
+
+No Liability for Contract Breach or Tort:
+The author is not liable for any breach of contract, whether express or implied, arising from the use of the Software. Similarly, the author is not liable for any tort claims, including but not limited to negligence or strict liability.
+
+Conclusion
+This MIT License grants significant freedom to use, modify, and distribute the Software while ensuring that the author is properly credited and protected from liability. Recipients of the Software are encouraged to exercise due diligence and review the License terms carefully to ensure compliance and to fully understand their rights and responsibilities.

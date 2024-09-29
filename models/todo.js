@@ -1,14 +1,23 @@
-// models/Todo.js
 import mongoose from 'mongoose';
 
 const TodoSchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, required: true },
-  text: { type: String, required: true },
-  description: String,
-  recurrence: { type: String, enum: ['once', 'daily', 'weekly', 'monthly'], default: 'once' },
-  groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true }, // Reference to the Group model
-  date: Date,
+  name: { type: String, required: true },
+  description: { type: String, required: true },
+  recurrence: { type: String, required: true },  // Choose a valid Mongoose type like String
+  created: { type: Date, default: Date.now },    // Timestamp when todo is created
   completed: { type: Boolean, default: false },
-}, { timestamps: true });
+  last_check: { type: Date }                     // Tracks when the completed field was last updated
+},
+  {
+    timestamps: { createdAt: 'created', updatedAt: false } // Only create 'created', no 'updatedAt'
+  });
+
+// Middleware to update 'last_check' whenever 'completed' is modified
+TodoSchema.pre('save', function (next) {
+  if (this.isModified('completed')) {
+    this.last_check = Date.now();
+  }
+  next();
+});
 
 export default mongoose.models.Todo || mongoose.model('Todo', TodoSchema);
