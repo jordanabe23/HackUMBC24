@@ -64,6 +64,9 @@ export default function RootLayout({ children }) {
 
   return (
     <html lang="en">
+      <head>
+        <title> PlantSync</title>
+      </head>
       <body className={`flex ${backgroundClass}`}>
         {isAuthorized && <Sidebar />}
         <main className="flex-1 min-h-screen p-6">
