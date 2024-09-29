@@ -26,22 +26,22 @@ export default function RootLayout({ children }) {
   useEffect(() => {
     const checkAuth = () => {
       const token = localStorage.getItem('token');
-      setIsAuthorized(!!token);
+      setIsAuthorized(!!token); // Set isAuthorized based on token presence
 
-      // Redirect if not authorized
+      // Redirect if not authorized and trying to access restricted routes
       if (!token && pathname !== '/login' && pathname !== '/register') {
         router.push('/register');
       }
     };
 
-    // Check auth status initially
+    // Check auth status on initial load
     checkAuth();
 
-    // Set up event listener for storage changes
+    // Listen for storage changes (e.g., when the token is updated during login)
     const storageListener = () => checkAuth();
     window.addEventListener('storage', storageListener);
 
-    // Clean up event listener
+    // Clean up the event listener on unmount
     return () => window.removeEventListener('storage', storageListener);
   }, [router, pathname]);
 

@@ -1,13 +1,14 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+// models/Todo.js
+import mongoose from 'mongoose';
 
-const todoSchema = new Schema({
-  groupId: { type: Schema.Types.ObjectId, ref: 'Group', required: true },
+const TodoSchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, required: true },
   text: { type: String, required: true },
+  description: String,
+  recurrence: { type: String, enum: ['once', 'daily', 'weekly', 'monthly'], default: 'once' },
+  groupId: { type: mongoose.Schema.Types.ObjectId, ref: 'Group', required: true }, // Reference to the Group model
+  date: Date,
   completed: { type: Boolean, default: false },
-  assignedTo: { type: Schema.Types.ObjectId, ref: 'User' }, // Optional: References to User
-  plantId: { type: Schema.Types.ObjectId, ref: 'Plant' }, // Optional: References to Plant
-  dueDate: { type: Date }
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Todo', todoSchema);
+export default mongoose.models.Todo || mongoose.model('Todo', TodoSchema);
