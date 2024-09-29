@@ -87,7 +87,7 @@ const Sidebar = () => {
           onClick={() => setIsExpanded(!isExpanded)}
         />
         <div className="flex items-center gap-x-4">
-          {isExpanded && <span className="text-gray-800 text-xl font-bold text-center">Reminders</span>}
+          {isExpanded && <span className="text-gray-800 text-xl font-bold text-center">PlantSync</span>}
         </div>
         <ul className="pt-6">
           {menuItems.map((item, index) => {
