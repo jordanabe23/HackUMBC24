@@ -16,8 +16,7 @@ const Sidebar = () => {
     { name: 'Chat', icon: <FaComments />, path: '/chat' },
     { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'People', icon: <FaUsers />, path: '/people' },
-    { name: 'Settings', icon: <FaCog />, path: '/settings' },
-    { name: 'Logout', icon: <FaSignOutAlt />, action: handleLogout } // Logout item
+    { name: 'Settings', icon: <FaCog />, path: '/settings' }
   ];
 
   function handleLogout() {
@@ -38,35 +37,27 @@ const Sidebar = () => {
   }, [hasCollapsedOnce]);
 
   return (
-    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000`}>
-      <FaLeaf
-        className={`absolute cursor-pointer -right-3 top-9 w-10 h-10 p-1 border-2 rounded-full
-          border-green-600 bg-green-200 text-green-900
-          transition-transform duration-500 ease-in-out
-          hover:rotate-180 hover:scale-150 hover:bg-green-400 hover:border-green-800 hover:text-white
-          shadow-xl hover:shadow-green-600/70
-        `}
-        title={isExpanded ? "Collapse" : "Expand"}  // Tooltip for clarity
-        onClick={() => setIsExpanded(!isExpanded)}
-      />
-      <div className="flex items-center gap-x-4">
-        <FaComments className="text-2xl text-gray-800" />
-        {isExpanded && <span className="text-gray-800 text-xl font-bold">Reminders</span>}
-      </div>
-      <ul className="pt-6">
-        {menuItems.map((item, index) => {
-          const isActive = pathname === item.path;
-          return (
-            <li key={index} className="flex items-center">
-              {item.action ? (
-                <div
-                  onClick={item.action}
-                  className={`flex items-center gap-x-4 cursor-pointer p-2 rounded-md mt-2 hover:bg-blue-300`}
-                >
-                  <span className="text-2xl text-gray-800">{item.icon}</span>
-                  {isExpanded && <span className="text-gray-800 text-lg">{item.name}</span>}
-                </div>
-              ) : (
+    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000 flex flex-col justify-between h-screen`}>
+      <div>
+        <FaLeaf
+          className={`absolute cursor-pointer -right-3 top-9 w-10 h-10 p-1 border-2 rounded-full
+            border-green-600 bg-green-200 text-green-900
+            transition-transform duration-500 ease-in-out
+            hover:rotate-180 hover:scale-150 hover:bg-green-400 hover:border-green-800 hover:text-white
+            shadow-xl hover:shadow-green-600/70
+          `}
+          title={isExpanded ? "Collapse" : "Expand"}  // Tooltip for clarity
+          onClick={() => setIsExpanded(!isExpanded)}
+        />
+        <div className="flex items-center gap-x-4">
+          <FaComments className="text-2xl text-gray-800" />
+          {isExpanded && <span className="text-gray-800 text-xl font-bold">Reminders</span>}
+        </div>
+        <ul className="pt-6">
+          {menuItems.map((item, index) => {
+            const isActive = pathname === item.path;
+            return (
+              <li key={index} className="flex items-center">
                 <Link href={item.path} passHref>
                   <div
                     className={`flex items-center gap-x-4 cursor-pointer p-2 rounded-md mt-2 ${isActive ? 'bg-blue-300' : 'hover:bg-blue-300'}`}
@@ -75,11 +66,22 @@ const Sidebar = () => {
                     {isExpanded && <span className="text-gray-800 text-lg">{item.name}</span>}
                   </div>
                 </Link>
-              )}
-            </li>
-          );
-        })}
-      </ul>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      {/* Logout Button Positioned at the Bottom */}
+      <div className="pb-4">
+        <div
+          onClick={handleLogout}
+          className="flex items-center gap-x-4 cursor-pointer p-2 rounded-md hover:bg-blue-300"
+        >
+          <span className="text-2xl text-gray-800"><FaSignOutAlt /></span>
+          {isExpanded && <span className="text-gray-800 text-lg">Logout</span>}
+        </div>
+      </div>
     </div>
   );
 };
