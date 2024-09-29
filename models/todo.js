@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
-import internal from 'stream';
 
 const TodoSchema = new mongoose.Schema({
   name: { type: String, required: true },
-  description: { type: String, required: true },  // Fixed description type
-  recurrence: { type: internal, required: true },
-  created: { type: Date, default: Date.now },     // Timestamp when todo is created
+  description: { type: String, required: true },
+  recurrence: { type: String, required: true },  // Choose a valid Mongoose type like String
+  created: { type: Date, default: Date.now },    // Timestamp when todo is created
   completed: { type: Boolean, default: false },
-  last_check: { type: Date }  // Tracks when the completed field was last updated
+  last_check: { type: Date }                     // Tracks when the completed field was last updated
 },
   {
     timestamps: { createdAt: 'created', updatedAt: false } // Only create 'created', no 'updatedAt'
