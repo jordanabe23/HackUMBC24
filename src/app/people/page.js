@@ -24,7 +24,7 @@ const People = () => {
       if (!token) {
         throw new Error('Authentication token not found.');
       }
-  
+
       const response = await fetch('/api/groups', {
         method: 'GET',
         headers: {
@@ -32,16 +32,16 @@ const People = () => {
           'Content-Type': 'application/json',
         },
       });
-  
+
       if (!response.ok) {
         throw new Error('Failed to fetch groups.');
       }
-  
+
       const data = await response.json();
-      
+
       // Debugging log to check the structure of data
       console.log("Fetched groups data:", data);
-      
+
       // Check if data is an array and has the required structure
       if (Array.isArray(data)) {
         // Ensure every group has `_id` and `groupName`
@@ -49,13 +49,13 @@ const People = () => {
           _id: group._id,
           name: group.name,
         }));
-        
+
         // Set the state with the formatted groups
         setGroups(formattedGroups);
       } else {
         console.error('Data fetched is not an array:', data);
       }
-      
+
     } catch (error) {
       console.error('Error fetching groups:', error);
     }
@@ -69,15 +69,19 @@ const People = () => {
     }));
   };
 
+  const handleGroupIdChange = (e) => {
+    setGroupId(e.target.value);
+  };
+
   const handleAddSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const token = localStorage.getItem('token');
       if (!token) {
         throw new Error('Authentication token not found.');
       }
-
+  
       // Define the todos for the plant
       const todos = [
         {
@@ -91,13 +95,13 @@ const People = () => {
           recurrence: plantData.soilFrequency,
         },
       ];
-
+  
       // Create a new group with name and todos
       const newGroup = {
         groupName: plantData.name, // Group name
         todos,  // The two todo items
       };
-
+  
       // Send POST request to API to create the group
       const response = await fetch('/api/groups', {
         method: 'POST',
@@ -107,19 +111,28 @@ const People = () => {
         },
         body: JSON.stringify(newGroup),
       });
-
+  
       if (!response.ok) {
         throw new Error('Failed to create new group.');
       }
-
+  
       const data = await response.json();
       setGroups([...groups, data]);  // Add the new group to the list
+  
+      // Reset the plant data fields after adding the plant
+      setPlantData({
+        name: '',
+        waterFrequency: 'daily',
+        soilFrequency: 'monthly',
+      });
+  
       setIsAddModalOpen(false);  // Close the modal after submission
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error creating new group:', error);
     }
   };
+  
 
   const handleJoinSubmit = (e) => {
     e.preventDefault();
@@ -129,6 +142,12 @@ const People = () => {
   };
 
   const openAddPlantModal = () => {
+    // Reset the plant data fields when opening the modal
+    setPlantData({
+      name: '',
+      waterFrequency: 'daily',
+      soilFrequency: 'monthly',
+    });
     setIsModalOpen(false);
     setIsAddModalOpen(true);
   };
@@ -151,18 +170,18 @@ const People = () => {
         <meta name="description" content="Manage your plant groups easily" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      
-     {/* Title at the top left */}
-     <h1 className="absolute top-6 left-6 text-3xl font-bold text-gray-800">Manage Your Plants</h1>
 
-     {/* Groups Display */}
-     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
+      {/* Title at the top left */}
+      <h1 className="absolute top-6 left-6 text-3xl font-bold text-gray-800">Manage Your Plants</h1>
+
+      {/* Groups Display */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-16">
         {groups.map((group) => (
           <div key={group._id} className="bg-white p-6 rounded-lg shadow-lg">
             {/* Display Group Name and ID */}
             <h2 className="text-xl text-black font-bold mb-2">
               Group Name: {group.name}
-            </h2> 
+            </h2>
             <p className="text-sm text-gray-500">
               Group ID: {group._id}
             </p>
@@ -229,7 +248,7 @@ const People = () => {
                   name="name"
                   value={plantData.name}
                   onChange={handleInputChange}
-                  className="mt-1 p-2 w-full border border-gray-300 rounded"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded text-black"  // Added text-black
                   required
                 />
               </div>
@@ -240,7 +259,7 @@ const People = () => {
                   name="waterFrequency"
                   value={plantData.waterFrequency}
                   onChange={handleInputChange}
-                  className="mt-1 p-2 w-full border border-gray-300 rounded"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded text-black"  // Added text-black
                 >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -254,7 +273,7 @@ const People = () => {
                   name="soilFrequency"
                   value={plantData.soilFrequency}
                   onChange={handleInputChange}
-                  className="mt-1 p-2 w-full border border-gray-300 rounded"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded text-black"  // Added text-black
                 >
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
@@ -298,7 +317,7 @@ const People = () => {
                   name="groupId"
                   value={groupId}
                   onChange={handleGroupIdChange}
-                  className="mt-1 p-2 w-full border border-gray-300 rounded"
+                  className="mt-1 p-2 w-full border border-gray-300 rounded text-black"  // Added text-black
                   required
                 />
               </div>

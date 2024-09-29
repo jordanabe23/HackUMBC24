@@ -88,6 +88,14 @@ const AuthPage = () => {
     }
   };
 
+  const toggleForm = () => {
+    setIsLogin((prev) => !prev);
+    setUsername('');  // Clear username field
+    setPassword('');  // Clear password field
+    setErrorMessage('');  // Clear error messages when switching forms
+    setSuccessMessage('');  // Clear success messages when switching forms
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-green-300">
       <Image src="/hackUMBC.png" alt="HackUMBC Logo" width={500} height={500} className="mb-4" />
@@ -111,7 +119,7 @@ const AuthPage = () => {
               placeholder="Enter your username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm text-black"
               required
             />
           </div>
@@ -125,7 +133,7 @@ const AuthPage = () => {
               placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm"
+              className="mt-1 block w-full px-4 py-2 border border-green-300 rounded-md shadow-sm focus:ring-green-500 focus:border-green-500 sm:text-sm text-black"
               required
             />
           </div>
@@ -145,7 +153,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 className="font-medium text-green-800 hover:text-green-700"
-                onClick={() => setIsLogin(false)}
+                onClick={toggleForm}
               >
                 Register here
               </button>
@@ -156,7 +164,7 @@ const AuthPage = () => {
               <button
                 type="button"
                 className="font-medium text-green-800 hover:text-green-700"
-                onClick={() => setIsLogin(true)}
+                onClick={toggleForm}
               >
                 Login here
               </button>
