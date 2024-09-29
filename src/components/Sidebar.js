@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { FaHome, FaComments, FaCalendarAlt, FaUsers, FaCog, FaBars, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaComments, FaCalendarAlt, FaUsers, FaCog, FaLeaf, FaSignOutAlt } from 'react-icons/fa';
 
 const Sidebar = () => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true); // Initially expanded
+  const [hasCollapsedOnce, setHasCollapsedOnce] = useState(false); // Track if it has collapsed once
   const router = useRouter();
   const pathname = usePathname();
 
@@ -16,8 +17,7 @@ const Sidebar = () => {
     { name: 'Calendar', icon: <FaCalendarAlt />, path: '/calendar' },
     { name: 'People', icon: <FaUsers />, path: '/people' },
     { name: 'Settings', icon: <FaCog />, path: '/settings' },
-    // Add the logout button as a menu item
-    { name: 'Logout', icon: <FaSignOutAlt />, action: handleLogout }
+    { name: 'Logout', icon: <FaSignOutAlt />, action: handleLogout } // Logout item
   ];
 
   function handleLogout() {
@@ -27,10 +27,26 @@ const Sidebar = () => {
     router.push('/login');
   }
 
+  // Auto-collapse the sidebar once after the component is first rendered
+  useEffect(() => {
+    if (!hasCollapsedOnce) {
+      setTimeout(() => {
+        setIsExpanded(false); // Collapse the sidebar
+        setHasCollapsedOnce(true); // Ensure it only happens once
+      }, 1000); // Optional delay of 1 second for visibility
+    }
+  }, [hasCollapsedOnce]);
+
   return (
-    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-300`}>
-      <FaBars
-        className={`absolute cursor-pointer -right-3 top-9 w-7 border-blue-300 border-2 rounded-full ${!isExpanded && 'rotate-180'}`}
+    <div className={`${isExpanded ? 'w-64' : 'w-20'} bg-blue-200 p-5 pt-8 relative duration-1000`}>
+      <FaLeaf
+        className={`absolute cursor-pointer -right-3 top-9 w-10 h-10 p-1 border-2 rounded-full
+          border-green-600 bg-green-200 text-green-900
+          transition-transform duration-500 ease-in-out
+          hover:rotate-180 hover:scale-150 hover:bg-green-400 hover:border-green-800 hover:text-white
+          shadow-xl hover:shadow-green-600/70
+        `}
+        title={isExpanded ? "Collapse" : "Expand"}  // Tooltip for clarity
         onClick={() => setIsExpanded(!isExpanded)}
       />
       <div className="flex items-center gap-x-4">
