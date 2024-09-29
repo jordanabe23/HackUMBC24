@@ -1,4 +1,3 @@
-// app/layout.js
 'use client';
 
 import localFont from "next/font/local";
@@ -46,12 +45,28 @@ export default function RootLayout({ children }) {
     return () => window.removeEventListener('storage', storageListener);
   }, [router, pathname]);
 
+  // Custom event listener for login
+  useEffect(() => {
+    const handleLogin = () => {
+      setIsAuthorized(true);
+    };
+
+    window.addEventListener('login', handleLogin);
+
+    // Clean up event listener
+    return () => window.removeEventListener('login', handleLogin);
+  }, []);
+
+  // Determine the background class based on the current path
+  const backgroundClass = pathname === '/register' || pathname === '/login'
+    ? 'bg-gradient-to-br from-green-100 to-green-300'
+    : 'bg-slate-50';
+
   return (
     <html lang="en">
-      <body className="flex">
-        {/* Show sidebar only if the user is authorized */}
+      <body className={`flex ${backgroundClass}`}>
         {isAuthorized && <Sidebar />}
-        <main className="flex-1 bg-slate-50 min-h-screen p-6">
+        <main className="flex-1 min-h-screen p-6">
           {children}
         </main>
       </body>
