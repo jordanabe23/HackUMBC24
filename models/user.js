@@ -25,6 +25,7 @@ const UserSchema = new Schema({
   groups: [{
     type: Schema.Types.ObjectId,
     ref: 'Group',  // Removed 'required: true' for array of references
+    required: true // Corrected typo here
   }],
 });
 
