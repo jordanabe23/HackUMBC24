@@ -1,17 +1,10 @@
-import Head from 'next/head';
-
+import CalendarComponent from '../../components/CalendarComponent'; // Ensure default export is used
 
 const Calendar = () => {
   return (
-      <div className="flex-1 bg-slate-50 min-h-screen p-6">
-        <Head>
-          <title>Chat - Group Reminders</title>
-          <meta name="description" content="Chat with your team" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        <h1 className="text-3xl font-bold text-gray-800">Calendar Page</h1>
-        {/* Chat functionality goes here */}
-      </div>
+    <div className="flex flex-col items-center justify-center bg-slate-50 min-h-screen p-6">
+      <CalendarComponent className="w-full max-w-4xl h-full max-h-[800px]" />
+    </div>
   );
 };
 
